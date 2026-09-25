@@ -121,6 +121,14 @@
                     android:layout_marginTop="8dp"
                     android:backgroundTint="#4E5D6C"
                     android:text="Khôi Phục Mặc Định" />
+                <Button
+                    android:id="@+id/btnSendReport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="#00BCD4"
+                    android:text="Gửi Báo Cáo Học Tập"
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
