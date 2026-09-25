@@ -2,10 +2,12 @@ package com.ute.btl
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ute.btl.databinding.ActivityMainBinding
+import com.ute.btl.utils.gone
+import com.ute.btl.utils.toAcademicRanking
+import com.ute.btl.utils.toast
+import com.ute.btl.utils.trimmedText
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Hiển thị dữ liệu ban đầu
+        // Hiển thị dữ liệu sinh viên ban đầu
         displayStudent(
             name = "Bùi Tá Lanh",
             gpa = 3.75,
-            email = "2415053122123"
+            email = "2415053122123@sv.ute.udn.vn"
         )
 
         // APPLY
@@ -47,39 +49,28 @@ class MainActivity : AppCompatActivity() {
             tvGpa.text = "GPA: $gpa"
             tvEmail.text = "Email: $email"
 
-            progressBar.visibility = View.GONE
+            progressBar.gone()
         }
     }
 
-    // LET + ALSO + RUN
+    // LET + ALSO
     private fun updateGpa() {
 
-        val rawInput: String? =
-            binding.edtGpa.text?.toString()?.trim()
+        val rawInput = binding.edtGpa.trimmedText()
 
-        rawInput?.let { input ->
+        rawInput.let { input ->
 
             val gpa = input.toDoubleOrNull()
 
+            // Kiểm tra dữ liệu nhập
             if (gpa == null) {
-
-                Toast.makeText(
-                    this,
-                    "GPA không hợp lệ",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                toast("GPA không hợp lệ")
                 return@let
             }
 
+            // Kiểm tra khoảng GPA
             if (gpa !in 0.0..4.0) {
-
-                Toast.makeText(
-                    this,
-                    "GPA phải từ 0.0 đến 4.0",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                toast("GPA phải từ 0.0 đến 4.0")
                 return@let
             }
 
@@ -91,25 +82,11 @@ class MainActivity : AppCompatActivity() {
                     "GPA mới: $validGpa"
                 )
 
-                Toast.makeText(
-                    this,
-                    "Đã nhận GPA: $validGpa",
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast("Đã nhận GPA: $validGpa")
             }
 
-            // RUN
-            val ranking = gpa.run {
-
-                when {
-                    this >= 3.6 -> "Xuất sắc"
-                    this >= 3.2 -> "Giỏi"
-                    this >= 2.5 -> "Khá"
-                    this >= 2.0 -> "Trung bình"
-                    this >= 1.0 -> "Yếu"
-                    else -> "Kém"
-                }
-            }
+            // Extension Function
+            val ranking = gpa.toAcademicRanking()
 
             binding.tvGpa.text =
                 "GPA: $gpa - Xếp loại: $ranking"
