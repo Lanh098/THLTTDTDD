@@ -1,10 +1,10 @@
 package com.ute.btl
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.ute.btl.databinding.ActivityMainBinding
 import com.ute.btl.model.Student
-import com.ute.btl.utils.gone
 import com.ute.btl.utils.toAcademicRanking
 import com.ute.btl.utils.toast
 import com.ute.btl.utils.trimmedText
@@ -34,13 +34,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // 1. VIEWBINDING
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         // 2. KHÔI PHỤC DỮ LIỆU
-
         if (savedInstanceState != null) {
 
             val saved =
@@ -51,13 +48,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         // 3. HIỂN THỊ DỮ LIỆU
-
         bindStudentData(currentStudent)
 
         // 4. NÚT CẬP NHẬT GPA
-
         binding.btnUpdateGpa.setOnClickListener {
 
             val gpa =
@@ -86,11 +80,14 @@ class MainActivity : AppCompatActivity() {
 
             toast("Đã cập nhật GPA thành công!")
         }
+
+        // 5. NÚT KHÔI PHỤC MẶC ĐỊNH
+        binding.btnReset.setOnClickListener {
+            showResetDialog()
+        }
     }
 
-
     // HÀM HIỂN THỊ STUDENT LÊN GIAO DIỆN
-
     private fun bindStudentData(student: Student) {
 
         with(binding) {
@@ -116,12 +113,41 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // LƯU STATE TRƯỚC KHI ACTIVITY BỊ HỦY
+    // TỰ MỞ RỘNG 2
+    // HIỂN THỊ HỘP THOẠI XÁC NHẬN KHÔI PHỤC
+    private fun showResetDialog() {
 
+        AlertDialog.Builder(this).apply {
+
+            setTitle("Xác nhận khôi phục")
+
+            setMessage(
+                "Bạn có chắc chắn muốn đặt lại " +
+                        "điểm GPA ban đầu (3.75) không?"
+            )
+
+            // Nút Hủy
+            setNegativeButton("Hủy") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            // Nút Đồng ý
+            setPositiveButton("Đồng ý") { _, _ ->
+
+                currentStudent = defaultStudent
+
+                bindStudentData(currentStudent)
+
+                toast("Đã khôi phục dữ liệu mặc định")
+            }
+
+        }.show()
+    }
+
+    // LƯU STATE TRƯỚC KHI ACTIVITY BỊ HỦY
     override fun onSaveInstanceState(
         outState: Bundle
     ) {
-
         super.onSaveInstanceState(outState)
 
         outState.putSerializable(
