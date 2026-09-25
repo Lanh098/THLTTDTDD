@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-
+import android.graphics.Color //thêm màu
 fun View.show() {
     visibility = View.VISIBLE
 }
@@ -34,4 +34,10 @@ fun Double.toAcademicRanking(): String = when {
     this >= 2.0 -> "Trung bình (Average)"
     this >= 1.0 -> "Yếu (Weak)"
     else -> "Kém (Poor)"
+}
+fun Double.toRankingColor(): Int = when { //thêm màu
+    this >= 3.6 -> Color.parseColor("#34B469")
+    this >= 3.2 -> Color.parseColor("#00BCD4")
+    this >= 2.5 -> Color.parseColor("#FF9800")
+    else -> Color.parseColor("#F44336")
 }

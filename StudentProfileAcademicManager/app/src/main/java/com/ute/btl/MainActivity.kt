@@ -8,6 +8,7 @@ import com.ute.btl.utils.gone
 import com.ute.btl.utils.toAcademicRanking
 import com.ute.btl.utils.toast
 import com.ute.btl.utils.trimmedText
+import com.ute.btl.utils.toRankingColor
 
 class MainActivity : AppCompatActivity() {
 
@@ -104,6 +105,10 @@ class MainActivity : AppCompatActivity() {
 
             tvGpaBadge.text =
                 "${student.gpa} GPA • ${student.gpa.toAcademicRanking()}"
+
+            tvGpaBadge.setTextColor(
+                student.gpa.toRankingColor()
+            )
 
             edtGpaInput.setText(
                 student.gpa.toString()
