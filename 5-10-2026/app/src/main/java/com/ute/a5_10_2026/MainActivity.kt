@@ -1,20 +1,38 @@
 package com.ute.a5_10_2026
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var tvName: TextView
+    private val editLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val newName = result.data?.getStringExtra("KEY_NAME")
+            if (!newName.isNullOrEmpty()) {
+                tvName.text = newName
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        tvName = findViewById(R.id.tvName)
+        val btnEdit = findViewById<Button>(R.id.btnEdit)
+
+        btnEdit.setOnClickListener {
+            val intent = Intent(this, EditActivity::class.java)
+            intent.putExtra("KEY_NAME", tvName.text.toString())
+            editLauncher.launch(intent)
         }
     }
 }

@@ -1,20 +1,30 @@
 package com.ute.a5_10_2026
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class EditActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_edit)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        val etName = findViewById<EditText>(R.id.etName)
+        val btnSave = findViewById<Button>(R.id.btnSave)
+        val currentName = intent.getStringExtra("KEY_NAME")
+        if (currentName != "Chưa có thông tin") {
+            etName.setText(currentName)
+            etName.setSelection(currentName?.length ?: 0) // Đặt con trỏ cuối chuỗi
+        }
+        btnSave.setOnClickListener {
+            val newName = etName.text.toString().trim()
+            val resultIntent = Intent()
+            resultIntent.putExtra("KEY_NAME", newName)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
         }
     }
 }
